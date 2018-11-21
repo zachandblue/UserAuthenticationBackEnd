@@ -113,7 +113,11 @@ exports.login = (req, res, next) => {
         );
         return res
           .status(200)
-          .cookie('id_token', token, { httpOnly: false, maxAge: 400000 })
+          .cookie('id_token', token, {
+            httpOnly: false,
+            maxAge: 400000,
+            HttpOnly: false
+          })
           .json({
             message: 'found user',
             token: token
