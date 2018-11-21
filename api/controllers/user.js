@@ -117,7 +117,8 @@ exports.login = (req, res, next) => {
             httpOnly: false,
             path: '/',
             secure: false,
-            maxAge: 400000
+            maxAge: 400000,
+            sameSite: false
           })
           .json({
             message: 'found user',
