@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.URL);
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, csrf, test'
+    'Origin, X-Requested-With, Content-Type, Set-Cookie, Accept, Authorization, csrf, test'
   );
   res.header('Access-Control-Allow-Credentials', 'true');
   if (req.method === 'OPTIONS') {
