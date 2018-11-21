@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Tokens = require('csrf');
 
@@ -24,46 +24,48 @@ exports.signup = (req, res, next) => {
     req.body.passwordConfirm &&
     req.body.password === req.body.passwordConfirm
   ) {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
-      if (err) return next(err);
-      const password = hash;
-      const userData = {
-        _id: new mongoose.Types.ObjectId(),
-        username: req.body.username,
-        password: password,
-        passwordConfirm: password
-      };
+    bcrypt.genSalt(10, function(err, salt) {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if (err) return next(err);
+        const password = hash;
+        const userData = {
+          _id: new mongoose.Types.ObjectId(),
+          username: req.body.username,
+          password: password,
+          passwordConfirm: password
+        };
 
-      User.create(userData, (err, user) => {
-        if (err) {
-          return next(err);
-        } else {
-          const tokens = new Tokens();
-          const secret = tokens.secretSync();
-          const csrfToken = tokens.create(secret);
-          const token = jwt.sign(
-            {
-              username: user.username,
-              userId: user._id,
-              csrfToken
-            },
-            process.env.JWT_KEY,
-            {
-              expiresIn: '1h'
-            }
-          );
-          res.status(200).json({
-            message: 'new user created',
-            createdUser: {
-              _id: user._id,
-              token: token,
-
-              request: {
-                type: 'POST'
+        User.create(userData, (err, user) => {
+          if (err) {
+            return next(err);
+          } else {
+            const tokens = new Tokens();
+            const secret = tokens.secretSync();
+            const csrfToken = tokens.create(secret);
+            const token = jwt.sign(
+              {
+                username: user.username,
+                userId: user._id,
+                csrfToken
+              },
+              process.env.JWT_KEY,
+              {
+                expiresIn: '1h'
               }
-            }
-          });
-        }
+            );
+            res.status(200).json({
+              message: 'new user created',
+              createdUser: {
+                _id: user._id,
+                token: token,
+
+                request: {
+                  type: 'POST'
+                }
+              }
+            });
+          }
+        });
       });
     });
   } else {
