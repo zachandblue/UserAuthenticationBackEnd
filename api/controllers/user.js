@@ -114,7 +114,8 @@ exports.login = (req, res, next) => {
         return res
           .status(200)
           .cookie('id_token', token, {
-            httpOnly: true,
+            httpOnly: false,
+            path: '/',
             maxAge: 400000
           })
           .json({
