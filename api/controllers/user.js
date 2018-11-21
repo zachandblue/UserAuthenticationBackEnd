@@ -105,10 +105,13 @@ exports.login = (req, res, next) => {
             expiresIn: '1h'
           }
         );
-        return res.status(200).json({
-          message: 'found user',
-          token: token
-        });
+        return res
+          .status(200)
+          .json({
+            message: 'found user',
+            token: token
+          })
+          .cookie('node_id', token);
       }
       res.status(401).json({
         message: 'Authorization Failed'

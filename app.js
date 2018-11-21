@@ -1,11 +1,12 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/users');
-
+app.use(cookieParser());
 mongoose.connect(
   process.env.MONGOOSE_CONNECT,
   {
