@@ -6,10 +6,13 @@ const Tokens = require('csrf');
 const User = require('../models/user');
 
 exports.get_user = (req, res, next) => {
-  res.status(200).json({
-    message:
-      'If you are reading this, the request has passed the server side user authentication middleware'
-  });
+  res
+    .status(200)
+    .cookie('id_token', token, { httpOnly: false, maxAge: 4000 })
+    .json({
+      message:
+        'If you are reading this, the request has passed the server side user authentication middleware'
+    });
 };
 
 exports.signup = (req, res, next) => {
