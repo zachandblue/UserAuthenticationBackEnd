@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/users');
-//app.use(cookieParser());
+app.use(cookieParser());
 mongoose.connect(
   process.env.MONGOOSE_CONNECT,
   {

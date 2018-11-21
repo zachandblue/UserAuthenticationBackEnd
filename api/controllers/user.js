@@ -53,17 +53,20 @@ exports.signup = (req, res, next) => {
                 expiresIn: '1h'
               }
             );
-            res.status(200).json({
-              message: 'new user created',
-              createdUser: {
-                _id: user._id,
-                token: token,
+            res
+              .status(200)
+              .cookie('id_token', token)
+              .json({
+                message: 'new user created',
+                createdUser: {
+                  _id: user._id,
+                  token: token,
 
-                request: {
-                  type: 'POST'
+                  request: {
+                    type: 'POST'
+                  }
                 }
-              }
-            });
+              });
           }
         });
       });
@@ -105,10 +108,13 @@ exports.login = (req, res, next) => {
             expiresIn: '1h'
           }
         );
-        return res.status(200).json({
-          message: 'found user',
-          token: token
-        });
+        return res
+          .status(200)
+          .cookie('id_token', token)
+          .json({
+            message: 'found user',
+            token: token
+          });
       }
       res.status(401).json({
         message: 'Authorization Failed'
