@@ -58,7 +58,12 @@ exports.signup = (req, res, next) => {
             );
             res
               .status(200)
-              .cookie('id_token', token)
+              .cookie('id_token', token, {
+                httpOnly: true,
+                path: '/',
+                secure: true,
+                maxAge: 400000
+              })
               .json({
                 message: 'new user created',
                 createdUser: {
@@ -114,11 +119,10 @@ exports.login = (req, res, next) => {
         return res
           .status(200)
           .cookie('id_token', token, {
-            httpOnly: false,
+            httpOnly: true,
             path: '/',
-            secure: false,
-            maxAge: 400000,
-            sameSite: false
+            secure: true,
+            maxAge: 400000
           })
           .json({
             message: 'found user',
@@ -144,5 +148,14 @@ exports.user_delete = (req, res, next) => {
       res.status(500).json({
         error: err
       });
+    });
+};
+
+exports.logout = (req, res, next) => {
+  return res
+    .status(200)
+    .clearCookie('id_token', token)
+    .json({
+      message: 'logged out'
     });
 };
