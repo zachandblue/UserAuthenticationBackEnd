@@ -102,6 +102,7 @@ exports.login = (req, res, next) => {
       }
       if (result) {
         //const secret = Tokens.secretSync();
+        console.log(result);
         const tokens = new Tokens();
         const secret = tokens.secretSync();
         const csrfToken = tokens.create(secret);
@@ -119,9 +120,9 @@ exports.login = (req, res, next) => {
         return res
           .status(200)
           .cookie('id_token', token, {
-            httpOnly: true,
+            httpOnly: false,
             path: '/',
-            secure: true,
+            secure: false,
             maxAge: 400000
           })
           .json({
@@ -154,7 +155,7 @@ exports.user_delete = (req, res, next) => {
 exports.logout = (req, res, next) => {
   return res
     .status(200)
-    .clearCookie('id_token', token)
+    .clearCookie('id_token')
     .json({
       message: 'logged out'
     });
