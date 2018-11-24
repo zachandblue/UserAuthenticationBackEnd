@@ -62,7 +62,7 @@ exports.signup = (req, res, next) => {
                 httpOnly: true,
                 path: '/',
                 secure: true,
-                maxAge: 400000
+                maxAge: 40000000
               })
               .json({
                 message: 'new user created',
@@ -123,7 +123,7 @@ exports.login = (req, res, next) => {
             httpOnly: false,
             path: '/',
             secure: false,
-            maxAge: 400000
+            maxAge: 40000000
           })
           .json({
             message: 'found user',
