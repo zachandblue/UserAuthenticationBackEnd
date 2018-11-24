@@ -140,11 +140,14 @@ exports.login = (req, res, next) => {
 exports.user_delete = (req, res, next) => {
   User.remove({ _id: req.body.userId })
     .exec()
-    .clearCookie('id_token')
+
     .then(result => {
-      res.status(200).json({
-        message: 'User deleted'
-      });
+      res
+        .status(200)
+        .clearCookie('id_token')
+        .json({
+          message: 'User deleted'
+        });
     })
     .catch(err => {
       res.status(500).json({
