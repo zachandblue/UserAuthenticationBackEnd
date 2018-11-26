@@ -23,8 +23,8 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   res.header(
     'Access-Control-Allow-Origin',
-    process.env.URL,
-    'https://userauthenticationfrontend.firebaseapp.com/'
+    `${process.env.URL},
+    https://userauthenticationfrontend.firebaseapp.com/`
   );
   res.header(
     'Access-Control-Allow-Headers',
