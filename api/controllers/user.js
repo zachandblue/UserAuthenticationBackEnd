@@ -6,13 +6,14 @@ const Tokens = require('csrf');
 const User = require('../models/user');
 
 exports.get_user = (req, res, next) => {
-  res
-    .status(200)
-
-    .json({
-      message:
-        'If you are reading this, the request has passed the server side user authentication middleware'
-    });
+  res.status(200).json({
+    message:
+      'If you are reading this, the request has passed the server side user authentication middleware',
+    request: {
+      type: 'POST',
+      url: 'https://user-auth-node.herokuapp.com/'
+    }
+  });
 };
 
 exports.signup = (req, res, next) => {
@@ -71,7 +72,13 @@ exports.signup = (req, res, next) => {
                   token: token,
 
                   request: {
-                    type: 'POST'
+                    type: 'POST',
+                    url: 'https://user-auth-node.herokuapp.com/signup',
+                    body: {
+                      username: 'String',
+                      password: 'String',
+                      passwordConfirm: 'String'
+                    }
                   }
                 }
               });
@@ -127,7 +134,15 @@ exports.login = (req, res, next) => {
           })
           .json({
             message: 'found user',
-            token: token
+            token: token,
+            request: {
+              type: 'POST',
+              url: 'https://user-auth-node.herokuapp.com/login',
+              body: {
+                username: 'String',
+                password: 'String'
+              }
+            }
           });
       }
       res.status(401).json({
@@ -146,7 +161,14 @@ exports.user_delete = (req, res, next) => {
         .status(200)
         .clearCookie('id_token')
         .json({
-          message: 'User deleted'
+          message: 'User deleted',
+          request: {
+            type: 'POST',
+            url: 'https://user-auth-node.herokuapp.com/delete',
+            body: {
+              userId: 'String'
+            }
+          }
         });
     })
     .catch(err => {
@@ -161,6 +183,10 @@ exports.logout = (req, res, next) => {
     .status(200)
     .clearCookie('id_token')
     .json({
-      message: 'logged out'
+      message: 'logged out',
+      request: {
+        type: 'POST',
+        url: 'https://user-auth-node.herokuapp.com/logout'
+      }
     });
 };
